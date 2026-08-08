@@ -2,6 +2,8 @@
 
 Aplikasi Generator QR Code dalam bahasa Python yang mendukung berbagai jenis input (**Teks, Link/URL, dan Gambar**), kustomisasi warna (Foreground & Background), serta penambahan gambar/logo di tengah QR Code dengan tampilan menarik.
 
+🌐 **Live Web Demo**: [https://qr-gene.streamlit.app/](https://qr-gene.streamlit.app/)
+
 ---
 
 ## 🌟 Fitur Utama
@@ -18,9 +20,9 @@ Aplikasi Generator QR Code dalam bahasa Python yang mendukung berbagai jenis inp
   - Menggunakan tingkat koreksi kesalahan tinggi (*High Error Correction ~30%*) sehingga QR tetap **100% scannable** dan valid saat dibaca oleh kamera smartphone.
   - Pilihan bentuk penutup logo: **Lingkaran (Circle)**, **Lengkung (Rounded)**, atau **Kotak (Square)**.
 - 🖥️ **3 Mode Penggunaan**:
-  1. **Desktop GUI App** (Interface aplikasi desktop berbasis CustomTkinter).
-  2. **Web UI App** (Interface berbasis browser web Streamlit).
-  3. **Command Line Interface (CLI)** & **Python API Script**.
+  1. **Live Web Demo** (Dapat diakses langsung di [qr-gene.streamlit.app](https://qr-gene.streamlit.app/)).
+  2. **Desktop GUI App** (Interface aplikasi desktop berbasis CustomTkinter).
+  3. **Local Web App & CLI** (Streamlit lokal & Command Line Interface).
 
 ---
 
@@ -36,7 +38,11 @@ pip install -r requirements.txt
 
 ## 🚀 Cara Menjalankan
 
-### 1. Mode Desktop Application (GUI - Default)
+### 1. Akses Web Application Online (Live Demo)
+Aplikasi dapat diakses langsung tanpa instalasi melalui browser:
+👉 **[https://qr-gene.streamlit.app/](https://qr-gene.streamlit.app/)**
+
+### 2. Mode Desktop Application (GUI - Default)
 Jalankan perintah berikut untuk membuka antarmuka aplikasi desktop:
 
 ```bash
@@ -44,15 +50,15 @@ python main.py
 ```
 *(Atau jalankan `python app_gui.py`)*
 
-### 2. Mode Web Application (Streamlit)
-Untuk menjalankan antarmuka di peramban web (browser):
+### 3. Mode Local Web Application (Streamlit)
+Untuk menjalankan antarmuka web secara lokal di komputer Anda:
 
 ```bash
 python main.py --web
 ```
 *(Atau `streamlit run app_streamlit.py`)*
 
-### 3. Mode Command Line Interface (CLI)
+### 4. Mode Command Line Interface (CLI)
 Contoh membuat QR Code dari terminal/command prompt:
 
 ```bash
