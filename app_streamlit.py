@@ -89,7 +89,7 @@ with col_preview:
                 border=4
             )
 
-            st.image(qr_image, use_column_width=True, caption="QR Code Siap Discan!")
+            st.image(qr_image, use_container_width=True, caption="QR Code Siap Discan!")
 
             # Convert to byte buffer for downloading
             buf = io.BytesIO()
