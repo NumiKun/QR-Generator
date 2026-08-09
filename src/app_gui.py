@@ -1,7 +1,13 @@
 import os
 import io
+import sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, colorchooser
+from pathlib import Path
+
+# Add project root directory to sys.path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from PIL import Image, ImageTk
 
 try:
@@ -12,10 +18,7 @@ try:
 except ImportError:
     BaseAppWindow = tk.Tk
 
-try:
-    from src.qr_generator import generate_qr
-except ImportError:
-    from .qr_generator import generate_qr
+from src.qr_generator import generate_qr
 
 class QRCodeGeneratorGUI:
     def __init__(self):
