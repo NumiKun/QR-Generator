@@ -48,7 +48,7 @@ Jalankan perintah berikut untuk membuka antarmuka aplikasi desktop:
 ```bash
 python main.py
 ```
-*(Atau jalankan `python app_gui.py`)*
+*(Atau jalankan `python src/app_gui.py`)*
 
 ### 3. Mode Local Web Application (Streamlit)
 Untuk menjalankan antarmuka web secara lokal di komputer Anda:
@@ -56,7 +56,7 @@ Untuk menjalankan antarmuka web secara lokal di komputer Anda:
 ```bash
 python main.py --web
 ```
-*(Atau `streamlit run app_streamlit.py`)*
+*(Atau `streamlit run src/app_streamlit.py`)*
 
 ### 4. Mode Command Line Interface (CLI)
 Contoh membuat QR Code dari terminal/command prompt:
@@ -68,12 +68,12 @@ python main.py --cli --data "Halo dari Terminal!" --fill "#0F172A" --bg "#E0F2FE
 
 ---
 
-## 💻 Penggunaan dalam Kode Python (`qr_generator.py`)
+## 💻 Penggunaan dalam Kode Python (`src/qr_generator.py`)
 
 Anda juga bisa mengimpor modul `qr_generator.py` langsung ke dalam proyek Python Anda:
 
 ```python
-from qr_generator import generate_qr
+from src.qr_generator import generate_qr
 
 # 1. QR Code Teks dengan Warna Custom
 qr_img = generate_qr(
@@ -113,12 +113,17 @@ qr_img_file.save("qr_gambar.png")
 ```
 QR Generator/
 │
-├── qr_generator.py       # Engine utama pembentuk QR Code, warna, & logo overlay
-├── app_gui.py            # Interface aplikasi Desktop (CustomTkinter)
-├── app_streamlit.py      # Interface aplikasi Web (Streamlit)
-├── main.py               # Main launcher script (GUI, Web, & CLI)
-├── test_qr_generator.py  # Unit test script untuk verifikasi modul
-├── requirements.txt      # Daftar dependensi pustaka Python
+├── src/
+│   ├── __init__.py           # Package marker
+│   ├── qr_generator.py       # Engine utama pembentuk QR Code, warna, & logo overlay
+│   ├── app_gui.py            # Interface aplikasi Desktop (CustomTkinter)
+│   └── app_streamlit.py      # Interface aplikasi Web (Streamlit)
+│
+├── tests/
+│   └── test_qr_generator.py  # Unit test script untuk verifikasi modul
+│
+├── main.py                   # Main launcher script (GUI, Web, & CLI)
+├── requirements.txt          # Daftar dependensi pustaka Python
 ├── .gitignore            # Filter file Git (cache, venv, temporary output)
 └── README.md             # Dokumentasi petunjuk penggunaan
 ```

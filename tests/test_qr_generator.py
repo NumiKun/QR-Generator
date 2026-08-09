@@ -1,6 +1,15 @@
 import os
+import sys
+from pathlib import Path
+
+# Add project root to sys.path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from PIL import Image, ImageDraw
-from qr_generator import generate_qr
+try:
+    from src.qr_generator import generate_qr
+except ImportError:
+    from qr_generator import generate_qr
 
 def create_dummy_logo(path="dummy_logo.png"):
     img = Image.new("RGBA", (100, 100), (30, 144, 255, 255))

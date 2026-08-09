@@ -1,7 +1,16 @@
 import io
+import sys
+from pathlib import Path
+
+# Ensure project root is in sys.path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 import streamlit as st
 from PIL import Image
-from qr_generator import generate_qr
+try:
+    from src.qr_generator import generate_qr
+except ImportError:
+    from qr_generator import generate_qr
 
 st.set_page_config(
     page_title="QR Code Generator Pro",

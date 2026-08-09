@@ -12,7 +12,10 @@ try:
 except ImportError:
     BaseAppWindow = tk.Tk
 
-from qr_generator import generate_qr
+try:
+    from src.qr_generator import generate_qr
+except ImportError:
+    from .qr_generator import generate_qr
 
 class QRCodeGeneratorGUI:
     def __init__(self):

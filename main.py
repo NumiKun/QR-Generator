@@ -1,7 +1,7 @@
 import sys
 import argparse
 import subprocess
-from qr_generator import generate_qr
+from src.qr_generator import generate_qr
 
 def run_cli(args):
     print(f"Generating QR Code for: {args.data}")
@@ -32,7 +32,7 @@ def main():
 
     if args.web:
         print("Menjalankan Web UI Streamlit...")
-        subprocess.run(["streamlit", "run", "app_streamlit.py"])
+        subprocess.run(["streamlit", "run", "src/app_streamlit.py"])
     elif args.cli:
         if not args.data:
             print("Error: Argumen --data diperlukan dalam mode CLI!")
@@ -40,7 +40,7 @@ def main():
         run_cli(args)
     else:
         # Launch Desktop GUI by default
-        from app_gui import QRCodeGeneratorGUI
+        from src.app_gui import QRCodeGeneratorGUI
         app = QRCodeGeneratorGUI()
         app.run()
 
