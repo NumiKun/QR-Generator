@@ -98,12 +98,12 @@ with col_preview:
                 border=4
             )
 
-            st.image(qr_image, use_container_width=True, caption="QR Code Siap Discan!")
-
-            # Convert to byte buffer for downloading
+            # Convert to byte buffer for display & download
             buf = io.BytesIO()
             qr_image.save(buf, format="PNG")
             byte_im = buf.getvalue()
+
+            st.image(byte_im, use_container_width=True, caption="QR Code Siap Discan!")
 
             st.download_button(
                 label="💾 Unduh QR Code (.png)",
