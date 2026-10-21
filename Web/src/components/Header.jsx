@@ -11,7 +11,6 @@ export default function Header() {
           <img src="/logo.svg" alt="AnyQR Logo" className="brand-logo-img" />
           <div className="brand-title">
             <span>AnyQR</span>
-            <span className="brand-badge">Precision Studio</span>
           </div>
         </div>
 
