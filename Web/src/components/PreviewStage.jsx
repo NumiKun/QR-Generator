@@ -1,0 +1,214 @@
+import React, { useEffect, useRef } from 'react';
+import { ShieldCheck, Cpu, Database, Binary, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { createQrInstance } from '../utils/qrEngine';
+import { analyzeQRMetadata } from '../utils/metadata';
+import { checkContrast } from '../utils/contrast';
+
+export default function PreviewStage({ config }) {
+  const containerRef = useRef(null);
+  const qrInstanceRef = useRef(null);
+
+  const {
+    payload,
+    fgColor,
+    bgColor,
+    isTransparent,
+    dotType,
+    cornerSquareType,
+    cornerDotType,
+    logoUrl,
+    logoScale,
+    logoMargin,
+    eccLevel,
+    ctaFrame,
+    ctaText,
+  } = config;
+
+  const effectiveEcc = logoUrl ? 'H' : eccLevel;
+  const metadata = analyzeQRMetadata(payload, effectiveEcc);
+  const contrastInfo = checkContrast(fgColor, bgColor, isTransparent);
+
+  // Initialize or update QR instance
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    if (!qrInstanceRef.current) {
+      qrInstanceRef.current = createQrInstance({
+        ...config,
+        eccLevel: effectiveEcc,
+        size: 240,
+      });
+      containerRef.current.innerHTML = '';
+      qrInstanceRef.current.append(containerRef.current);
+    } else {
+      qrInstanceRef.current.update({
+        data: payload || 'https://anyqr.dev',
+        image: logoUrl || undefined,
+        qrOptions: {
+          errorCorrectionLevel: effectiveEcc,
+        },
+        imageOptions: {
+          hideBehindDots: true,
+          imageSize: logoScale,
+          margin: logoMargin,
+        },
+        dotsOptions: {
+          color: fgColor,
+          type: dotType,
+        },
+        backgroundOptions: {
+          color: isTransparent ? 'rgba(0,0,0,0)' : bgColor,
+        },
+        cornersSquareOptions: {
+          color: fgColor,
+          type: cornerSquareType,
+        },
+        cornersDotOptions: {
+          color: fgColor,
+          type: cornerDotType,
+        },
+      });
+    }
+  }, [
+    payload,
+    fgColor,
+    bgColor,
+    isTransparent,
+    dotType,
+    cornerSquareType,
+    cornerDotType,
+    logoUrl,
+    logoScale,
+    logoMargin,
+    effectiveEcc,
+  ]);
+
+  return (
+    <div className="preview-sticky-stage">
+      <div className="stage-card">
+        {/* Live Vector Stage Indicator */}
+        <div className="stage-badge-live">
+          <span className="pulse-dot"></span>
+          <span>Live Vector Stage</span>
+        </div>
+
+        {/* QR Preview Wrapper with CTA Frames */}
+        <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {ctaFrame === 'top-header' && (
+            <div style={{
+              background: fgColor,
+              color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
+              padding: '6px 20px',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.8125rem',
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              marginBottom: '12px',
+              boxShadow: 'var(--shadow-sm)',
+            }}>
+              {ctaText}
+            </div>
+          )}
+
+          {ctaFrame === 'phone-mockup' ? (
+            <div style={{
+              border: `10px solid ${fgColor}`,
+              borderRadius: '32px',
+              padding: '24px 16px 20px',
+              background: isTransparent ? 'transparent' : bgColor,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              boxShadow: 'var(--shadow-lg)',
+              position: 'relative',
+            }}>
+              <div style={{
+                width: '40px',
+                height: '4px',
+                background: 'rgba(0,0,0,0.2)',
+                borderRadius: '4px',
+                marginBottom: '14px',
+              }} />
+              <div
+                ref={containerRef}
+                className={`qr-preview-box ${isTransparent ? 'transparent-bg' : ''}`}
+                style={{ width: '240px', height: '240px', margin: 0, padding: 0, background: 'transparent' }}
+              />
+              <div style={{
+                marginTop: '12px',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                color: fgColor,
+                letterSpacing: '0.04em',
+              }}>
+                {ctaText}
+              </div>
+            </div>
+          ) : (
+            <div
+              className={`qr-preview-box ${isTransparent ? 'transparent-bg' : ''}`}
+              style={{ background: isTransparent ? undefined : bgColor }}
+            >
+              <div ref={containerRef} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+            </div>
+          )}
+
+          {ctaFrame === 'bottom-ribbon' && (
+            <div style={{
+              background: fgColor,
+              color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
+              padding: '6px 24px',
+              borderRadius: 'var(--radius-full)',
+              fontSize: '0.8125rem',
+              fontWeight: 800,
+              letterSpacing: '0.08em',
+              marginTop: '10px',
+              boxShadow: 'var(--shadow-sm)',
+            }}>
+              {ctaText}
+            </div>
+          )}
+        </div>
+
+        {/* Contrast Scannability Indicator */}
+        <div className={`contrast-badge ${contrastInfo.status}`} style={{ marginTop: '16px' }}>
+          {contrastInfo.isPassing ? <CheckCircle2 size={13} /> : <ShieldAlert size={13} />}
+          <span>{contrastInfo.badgeText} ({contrastInfo.ratio}:1)</span>
+        </div>
+
+        {/* Technical Metadata Readout Deck */}
+        <div className="metadata-deck">
+          <div className="metadata-item">
+            <span className="metadata-label">
+              <Cpu size={11} style={{ display: 'inline', marginRight: '4px' }} />
+              ECC Level
+            </span>
+            <span className="metadata-value">
+              {effectiveEcc} ({metadata.eccPercent})
+            </span>
+          </div>
+
+          <div className="metadata-item">
+            <span className="metadata-label">
+              <Database size={11} style={{ display: 'inline', marginRight: '4px' }} />
+              QR Version
+            </span>
+            <span className="metadata-value">
+              v{metadata.version} ({metadata.dimensions})
+            </span>
+          </div>
+
+          <div className="metadata-item">
+            <span className="metadata-label">
+              <Binary size={11} style={{ display: 'inline', marginRight: '4px' }} />
+              Encoding
+            </span>
+            <span className="metadata-value">
+              {metadata.mode}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
