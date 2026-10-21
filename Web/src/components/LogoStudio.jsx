@@ -58,16 +58,17 @@ export default function LogoStudio({
             borderRadius: 'var(--radius-md)',
             padding: '24px 16px',
             textAlign: 'center',
-            background: 'var(--bg-input)',
+            background: '#f8fafc',
             cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: '8px',
+            transition: 'background 150ms ease, border-color 150ms ease',
           }}
           onClick={() => document.getElementById('logo-upload-input')?.click()}
         >
-          <Upload size={24} style={{ color: '#818cf8' }} />
+          <Upload size={24} style={{ color: 'var(--color-primary)' }} />
           <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Upload Brand Logo or Icon</span>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
             Supports SVG, PNG, WebP with transparency. Processed 100% locally.

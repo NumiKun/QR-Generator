@@ -141,13 +141,13 @@ export default function ColorStudio({
           marginTop: '16px',
           padding: '10px 14px',
           borderRadius: 'var(--radius-md)',
-          background: 'rgba(239, 68, 68, 0.12)',
-          border: '1px solid rgba(239, 68, 68, 0.25)',
+          background: '#fef2f2',
+          border: '1px solid #fecaca',
           display: 'flex',
           alignItems: 'center',
           gap: '10px',
           fontSize: '0.8125rem',
-          color: '#f87171',
+          color: '#b91c1c',
         }}>
           <ShieldAlert size={18} style={{ flexShrink: 0 }} />
           <span>

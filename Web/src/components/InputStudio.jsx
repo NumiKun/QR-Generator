@@ -271,16 +271,17 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               borderRadius: 'var(--radius-md)',
               padding: '24px 16px',
               textAlign: 'center',
-              background: 'var(--bg-input)',
+              background: '#f8fafc',
               cursor: 'pointer',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '8px',
+              transition: 'background 150ms ease, border-color 150ms ease',
             }}
             onClick={() => document.getElementById('payload-file-input')?.click()}
           >
-            <Upload size={28} style={{ color: '#818cf8' }} />
+            <Upload size={28} style={{ color: 'var(--color-primary)' }} />
             <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Click to browse or drop small image/file</span>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
               Encodes to client-side Base64 Data URI (recommended &lt; 2KB for optimal mobile scanning)
