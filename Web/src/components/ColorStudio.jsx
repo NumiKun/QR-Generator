@@ -138,26 +138,28 @@ export default function ColorStudio({
         </div>
       </div>
 
-      {/* Peringatan jika warna kurang kontras */}
-      {!contrastInfo.isPassing && (
-        <div style={{
-          marginTop: '16px',
-          padding: '10px 14px',
-          borderRadius: 'var(--radius-md)',
-          background: '#fef2f2',
-          border: '1px solid #fecaca',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          fontSize: '0.8125rem',
-          color: '#b91c1c',
-        }}>
-          <ShieldAlert size={18} style={{ flexShrink: 0 }} />
-          <span>
-            <strong>Perhatian:</strong> Warna kode QR dan latar belakang terlalu mirip. Kamera HP mungkin akan sulit membaca QR Code ini. Cobalah pilih warna yang lebih gelap untuk titik QR atau lebih terang untuk latar.
-          </span>
+      {/* Peringatan jika warna kurang kontras dengan animasi smooth */}
+      <div className={`smooth-alert-drawer ${!contrastInfo.isPassing ? 'open' : ''}`}>
+        <div className="smooth-alert-inner">
+          <div style={{
+            padding: '11px 14px',
+            borderRadius: 'var(--radius-md)',
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+            fontSize: '0.8125rem',
+            color: '#b91c1c',
+            lineHeight: 1.5,
+          }}>
+            <ShieldAlert size={18} style={{ flexShrink: 0 }} />
+            <span>
+              <strong>Perhatian:</strong> Warna kode QR dan latar belakang terlalu mirip. Kamera HP mungkin akan sulit membaca QR Code ini. Cobalah pilih warna yang lebih gelap untuk titik QR atau lebih terang untuk latar.
+            </span>
+          </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }
