@@ -11,6 +11,77 @@ import PrintModal from './components/PrintModal';
 
 const STORAGE_KEY = 'anyqr_user_preferences_v1';
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('AnyQR ErrorBoundary caught:', error, errorInfo);
+  }
+
+  handleReset = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    window.location.reload();
+  };
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '24px',
+          textAlign: 'center',
+          background: '#f8fafc',
+          color: '#0f172a',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+        }}>
+          <div style={{
+            maxWidth: '460px',
+            background: '#ffffff',
+            padding: '36px 28px',
+            borderRadius: '16px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.08)',
+          }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px', color: '#dc2626' }}>
+              Terjadi Kesalahan Memuat Data
+            </h2>
+            <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '24px', lineHeight: 1.5 }}>
+              Data payload atau gambar yang dipilih melebihi batas kapasitas QR Code.
+            </p>
+            <button
+              onClick={this.handleReset}
+              style={{
+                background: '#4f46e5',
+                color: '#ffffff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '8px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                fontSize: '0.875rem',
+              }}
+            >
+              Reset ke Tampilan Normal
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   // State initialization with LocalStorage persistence
   const [payload, setPayload] = useState('https://anyqr.dev');
@@ -86,73 +157,75 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+    <ErrorBoundary>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
 
-      <main className="studio-layout">
-        {/* Left Column: Customization Studio Workspace */}
-        <div className="studio-workspace">
-          <InputStudio
-            payload={payload}
-            setPayload={setPayload}
-            inputMode={inputMode}
-            setInputMode={setInputMode}
-          />
+        <main className="studio-layout">
+          {/* Left Column: Customization Studio Workspace */}
+          <div className="studio-workspace">
+            <InputStudio
+              payload={payload}
+              setPayload={setPayload}
+              inputMode={inputMode}
+              setInputMode={setInputMode}
+            />
 
-          <ColorStudio
-            fgColor={fgColor}
-            setFgColor={setFgColor}
-            bgColor={bgColor}
-            setBgColor={setBgColor}
-            isTransparent={isTransparent}
-            setIsTransparent={setIsTransparent}
-          />
+            <ColorStudio
+              fgColor={fgColor}
+              setFgColor={setFgColor}
+              bgColor={bgColor}
+              setBgColor={setBgColor}
+              isTransparent={isTransparent}
+              setIsTransparent={setIsTransparent}
+            />
 
-          <MatrixStudio
-            dotType={dotType}
-            setDotType={setDotType}
-            cornerSquareType={cornerSquareType}
-            setCornerSquareType={setCornerSquareType}
-            cornerDotType={cornerDotType}
-            setCornerDotType={setCornerDotType}
-          />
+            <MatrixStudio
+              dotType={dotType}
+              setDotType={setDotType}
+              cornerSquareType={cornerSquareType}
+              setCornerSquareType={setCornerSquareType}
+              cornerDotType={cornerDotType}
+              setCornerDotType={setCornerDotType}
+            />
 
-          <LogoStudio
-            logoUrl={logoUrl}
-            setLogoUrl={setLogoUrl}
-            logoScale={logoScale}
-            setLogoScale={setLogoScale}
-            logoMargin={logoMargin}
-            setLogoMargin={setLogoMargin}
-            eccLevel={eccLevel}
-            setEccLevel={setEccLevel}
-          />
+            <LogoStudio
+              logoUrl={logoUrl}
+              setLogoUrl={setLogoUrl}
+              logoScale={logoScale}
+              setLogoScale={setLogoScale}
+              logoMargin={logoMargin}
+              setLogoMargin={setLogoMargin}
+              eccLevel={eccLevel}
+              setEccLevel={setEccLevel}
+            />
 
-          <CtaStudio
-            ctaFrame={ctaFrame}
-            setCtaFrame={setCtaFrame}
-            ctaText={ctaText}
-            setCtaText={setCtaText}
-          />
-        </div>
+            <CtaStudio
+              ctaFrame={ctaFrame}
+              setCtaFrame={setCtaFrame}
+              ctaText={ctaText}
+              setCtaText={setCtaText}
+            />
+          </div>
 
-        {/* Right Column: Sticky Live Vector Stage & Export Deck */}
-        <div>
-          <PreviewStage config={currentConfig} />
-          <ExportDeck
+          {/* Right Column: Sticky Live Vector Stage & Export Deck */}
+          <div>
+            <PreviewStage config={currentConfig} />
+            <ExportDeck
+              config={currentConfig}
+              onOpenPrint={() => setIsPrintModalOpen(true)}
+            />
+          </div>
+        </main>
+
+        {/* Printable Sheet Modal */}
+        {isPrintModalOpen && (
+          <PrintModal
             config={currentConfig}
-            onOpenPrint={() => setIsPrintModalOpen(true)}
+            onClose={() => setIsPrintModalOpen(false)}
           />
-        </div>
-      </main>
-
-      {/* Printable Sheet Modal */}
-      {isPrintModalOpen && (
-        <PrintModal
-          config={currentConfig}
-          onClose={() => setIsPrintModalOpen(false)}
-        />
-      )}
-    </div>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }

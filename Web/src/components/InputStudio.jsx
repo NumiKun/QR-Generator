@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link2, AlignLeft, Upload, Wifi, X, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Link2, AlignLeft, Upload, Wifi, X, AlertCircle, CheckCircle2, Loader2, AlertTriangle } from 'lucide-react';
+import { compressImageToDataUri } from '../utils/imageCompressor';
 
 export default function InputStudio({ payload, setPayload, inputMode, setInputMode }) {
   const [wifiData, setWifiData] = useState({
@@ -8,6 +9,9 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
     encryption: 'WPA',
     hidden: false,
   });
+
+  const [isCompressing, setIsCompressing] = useState(false);
+  const [fileError, setFileError] = useState('');
 
   const handleUrlChange = (val) => {
     setPayload(val);
@@ -33,22 +37,28 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
     }
   };
 
-  // Unggah File / Gambar
-  const handleFileUpload = (e) => {
+  // Unggah File / Gambar dengan Auto-Compress agar tidak melebihi kapasitas QR
+  const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2500) {
-      alert(`Peringatan: Ukuran file (${Math.round(file.size / 1024)} KB) terlalu besar untuk QR code. Kamera HP mungkin akan sulit memindainya. Disarankan di bawah 2 KB.`);
-    }
+    setFileError('');
+    setIsCompressing(true);
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      if (ev.target?.result) {
-        setPayload(ev.target.result);
+    try {
+      const result = await compressImageToDataUri(file);
+      if (result.success && result.dataUri) {
+        setPayload(result.dataUri);
+      } else {
+        setFileError(result.error || 'Ukuran file terlalu besar untuk dimuat ke dalam QR Code.');
       }
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      setFileError('Gagal memproses file. Silakan coba file lain yang lebih kecil.');
+    } finally {
+      setIsCompressing(false);
+      // Reset input agar file yang sama bisa dipilih ulang jika diinginkan
+      e.target.value = '';
+    }
   };
 
   // Format Wi-Fi: WIFI:S:MySSID;T:WPA;P:MyPassword;H:false;;
@@ -85,6 +95,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           className={`tab-btn ${inputMode === 'url' ? 'active' : ''}`}
           onClick={() => {
             setInputMode('url');
+            setFileError('');
             if (!payload || payload.startsWith('WIFI:') || payload.startsWith('data:')) {
               setPayload('https://');
             }
@@ -98,6 +109,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           className={`tab-btn ${inputMode === 'text' ? 'active' : ''}`}
           onClick={() => {
             setInputMode('text');
+            setFileError('');
             if (payload === 'https://') setPayload('');
           }}
         >
@@ -109,6 +121,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           className={`tab-btn ${inputMode === 'wifi' ? 'active' : ''}`}
           onClick={() => {
             setInputMode('wifi');
+            setFileError('');
             updateWifiPayload(wifiData);
           }}
         >
@@ -118,7 +131,10 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
 
         <button
           className={`tab-btn ${inputMode === 'file' ? 'active' : ''}`}
-          onClick={() => setInputMode('file')}
+          onClick={() => {
+            setInputMode('file');
+            setFileError('');
+          }}
         >
           <Upload size={15} />
           <span>File / Gambar</span>
@@ -197,8 +213,8 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           </div>
           <div className="byte-counter-bar">
             <span></span>
-            <span style={{ color: charCount > 500 ? '#dc2626' : 'var(--text-muted)' }}>
-              {charCount > 500 ? 'Teks cukup panjang (QR akan lebih padat)' : `${charCount} karakter`}
+            <span style={{ color: charCount > 1500 ? '#dc2626' : 'var(--text-muted)' }}>
+              {charCount > 1500 ? 'Teks sangat panjang (QR akan sangat rapat)' : `${charCount} karakter`}
             </span>
           </div>
         </div>
@@ -262,6 +278,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
       {inputMode === 'file' && (
         <div className="input-group">
           <label className="input-label">Unggah Gambar atau File</label>
+          
           <div
             style={{
               border: '2px dashed var(--border-default)',
@@ -269,36 +286,104 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               padding: '24px 16px',
               textAlign: 'center',
               background: '#f8fafc',
-              cursor: 'pointer',
+              cursor: isCompressing ? 'wait' : 'pointer',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '8px',
               transition: 'background 150ms ease, border-color 150ms ease',
             }}
-            onClick={() => document.getElementById('payload-file-input')?.click()}
+            onClick={() => {
+              if (!isCompressing) {
+                document.getElementById('payload-file-input')?.click();
+              }
+            }}
           >
-            <Upload size={28} style={{ color: 'var(--color-primary)' }} />
-            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Klik untuk memilih gambar atau file</span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Disarankan ukuran file di bawah 2 KB agar kamera HP mudah membaca saat di-scan
+            {isCompressing ? (
+              <Loader2 size={28} className="animate-spin" style={{ color: 'var(--color-primary)' }} />
+            ) : (
+              <Upload size={28} style={{ color: 'var(--color-primary)' }} />
+            )}
+
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+              {isCompressing ? 'Sedang memproses dan mengompresi gambar...' : 'Klik untuk memilih gambar atau file'}
             </span>
+
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              Sistem akan otomatis mengecilkan gambar agar muat dalam batas kapasitas QR Code (~2 KB)
+            </span>
+
             <input
               id="payload-file-input"
               type="file"
+              accept="image/*,.txt,.pdf"
               style={{ display: 'none' }}
               onChange={handleFileUpload}
             />
           </div>
 
-          {payload && payload.startsWith('data:') && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', fontSize: '0.75rem' }}>
-              <span style={{ color: '#059669', fontWeight: 600 }}>File berhasil dimuat</span>
+          {/* Pesan Kesalahan File Terlalu Besar */}
+          {fileError && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 14px',
+              borderRadius: 'var(--radius-md)',
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              color: '#b91c1c',
+              fontSize: '0.8125rem',
+              marginTop: '6px',
+            }}>
+              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
+              <span>{fileError}</span>
+            </div>
+          )}
+
+          {/* Indikator File yang Berhasil Dimuat */}
+          {payload && payload.startsWith('data:') && !fileError && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginTop: '8px',
+              padding: '10px 14px',
+              borderRadius: 'var(--radius-md)',
+              background: '#ecfdf5',
+              border: '1px solid #a7f3d0',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                {payload.startsWith('data:image/') && (
+                  <img
+                    src={payload}
+                    alt="Thumbnail"
+                    style={{ width: '32px', height: '32px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #cbd5e1', background: '#ffffff' }}
+                  />
+                )}
+                <div>
+                  <span style={{ color: '#059669', fontWeight: 700, fontSize: '0.8125rem', display: 'block' }}>
+                    Gambar Siap Dibuat QR
+                  </span>
+                  <span style={{ color: '#047857', fontSize: '0.71875rem' }}>
+                    Ukuran data: {Math.round(payload.length / 1024 * 10) / 10} KB (Aman)
+                  </span>
+                </div>
+              </div>
+
               <button
                 onClick={() => setPayload('')}
-                style={{ color: '#dc2626', textDecoration: 'underline', fontWeight: 600 }}
+                style={{
+                  color: '#dc2626',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  padding: '4px 10px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: '#ffffff',
+                  border: '1px solid #fecaca',
+                }}
               >
-                Hapus file
+                Hapus
               </button>
             </div>
           )}

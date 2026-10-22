@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Cpu, Database, Binary, CheckCircle2, ShieldAlert, HelpCircle } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Cpu, Database, Binary, CheckCircle2, ShieldAlert, HelpCircle, AlertTriangle } from 'lucide-react';
 import { createQrInstance } from '../utils/qrEngine';
 import { analyzeQRMetadata } from '../utils/metadata';
 import { checkContrast } from '../utils/contrast';
@@ -7,6 +7,7 @@ import { checkContrast } from '../utils/contrast';
 export default function PreviewStage({ config }) {
   const containerRef = useRef(null);
   const qrInstanceRef = useRef(null);
+  const [renderError, setRenderError] = useState('');
 
   const {
     payload,
@@ -28,46 +29,52 @@ export default function PreviewStage({ config }) {
   const metadata = analyzeQRMetadata(payload, effectiveEcc);
   const contrastInfo = checkContrast(fgColor, bgColor, isTransparent);
 
-  // Inisialisasi atau pembaruan mesin QR
+  // Inisialisasi atau pembaruan mesin QR dengan proteksi anti-crash
   useEffect(() => {
     if (!containerRef.current) return;
 
-    if (!qrInstanceRef.current) {
-      qrInstanceRef.current = createQrInstance({
-        ...config,
-        eccLevel: effectiveEcc,
-        size: 240,
-      });
-      containerRef.current.innerHTML = '';
-      qrInstanceRef.current.append(containerRef.current);
-    } else {
-      qrInstanceRef.current.update({
-        data: payload || 'https://anyqr.dev',
-        image: logoUrl || undefined,
-        qrOptions: {
-          errorCorrectionLevel: effectiveEcc,
-        },
-        imageOptions: {
-          hideBehindDots: true,
-          imageSize: logoScale,
-          margin: logoMargin,
-        },
-        dotsOptions: {
-          color: fgColor,
-          type: dotType,
-        },
-        backgroundOptions: {
-          color: isTransparent ? 'rgba(0,0,0,0)' : bgColor,
-        },
-        cornersSquareOptions: {
-          color: fgColor,
-          type: cornerSquareType,
-        },
-        cornersDotOptions: {
-          color: fgColor,
-          type: cornerDotType,
-        },
-      });
+    try {
+      if (!qrInstanceRef.current) {
+        qrInstanceRef.current = createQrInstance({
+          ...config,
+          eccLevel: effectiveEcc,
+          size: 240,
+        });
+        containerRef.current.innerHTML = '';
+        qrInstanceRef.current.append(containerRef.current);
+      } else {
+        qrInstanceRef.current.update({
+          data: payload || 'https://anyqr.dev',
+          image: logoUrl || undefined,
+          qrOptions: {
+            errorCorrectionLevel: effectiveEcc,
+          },
+          imageOptions: {
+            hideBehindDots: true,
+            imageSize: logoScale,
+            margin: logoMargin,
+          },
+          dotsOptions: {
+            color: fgColor,
+            type: dotType,
+          },
+          backgroundOptions: {
+            color: isTransparent ? 'rgba(0,0,0,0)' : bgColor,
+          },
+          cornersSquareOptions: {
+            color: fgColor,
+            type: cornerSquareType,
+          },
+          cornersDotOptions: {
+            color: fgColor,
+            type: cornerDotType,
+          },
+        });
+      }
+      setRenderError('');
+    } catch (err) {
+      console.warn('QR Render caught safe exception:', err);
+      setRenderError('Ukuran file atau panjang teks melebihi kapasitas standar QR Code (Maks ~2 KB).');
     }
   }, [
     payload,
@@ -129,11 +136,38 @@ export default function PreviewStage({ config }) {
                 borderRadius: '4px',
                 marginBottom: '14px',
               }} />
+              
               <div
-                ref={containerRef}
                 className={`qr-preview-box ${isTransparent ? 'transparent-bg' : ''}`}
                 style={{ width: '240px', height: '240px', margin: 0, padding: 0, background: 'transparent' }}
-              />
+              >
+                {renderError ? (
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    padding: '16px',
+                    background: '#fef2f2',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1.5px dashed #f87171',
+                    color: '#991b1b',
+                    gap: '6px',
+                  }}>
+                    <AlertTriangle size={28} style={{ color: '#dc2626' }} />
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 700 }}>Data Melebihi Kapasitas</span>
+                    <span style={{ fontSize: '0.6875rem', color: '#b91c1c', lineHeight: 1.4 }}>
+                      Kapasitas maksimal QR Code adalah ~2 KB. Silakan kurangi teks atau gunakan file yang lebih kecil.
+                    </span>
+                  </div>
+                ) : (
+                  <div ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                )}
+              </div>
+
               <div style={{
                 marginTop: '12px',
                 fontSize: '0.75rem',
@@ -149,7 +183,31 @@ export default function PreviewStage({ config }) {
               className={`qr-preview-box ${isTransparent ? 'transparent-bg' : ''}`}
               style={{ background: isTransparent ? undefined : bgColor }}
             >
-              <div ref={containerRef} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+              {renderError ? (
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  padding: '16px',
+                  background: '#fef2f2',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1.5px dashed #f87171',
+                  color: '#991b1b',
+                  gap: '6px',
+                }}>
+                  <AlertTriangle size={28} style={{ color: '#dc2626' }} />
+                  <span style={{ fontSize: '0.8125rem', fontWeight: 700 }}>Data Melebihi Kapasitas</span>
+                  <span style={{ fontSize: '0.6875rem', color: '#b91c1c', lineHeight: 1.4 }}>
+                    Kapasitas maksimal QR Code adalah ~2 KB. Silakan kurangi teks atau gunakan file yang lebih kecil.
+                  </span>
+                </div>
+              ) : (
+                <div ref={containerRef} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+              )}
             </div>
           )}
 
