@@ -638,6 +638,7 @@ button {
 }
 
 .metadata-item {
+  position: relative;
   background: #f8fafc;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
@@ -645,6 +646,15 @@ button {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  cursor: help;
+  transition: all var(--transition-fast);
+}
+
+.metadata-item:hover {
+  background: #ffffff;
+  border-color: var(--border-default);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
 }
 
 .metadata-label {
@@ -653,6 +663,19 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metadata-info-icon {
+  opacity: 0.5;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.metadata-item:hover .metadata-info-icon {
+  opacity: 1;
+  color: var(--color-primary);
 }
 
 .metadata-value {
@@ -660,6 +683,88 @@ button {
   font-family: var(--font-mono);
   font-weight: 700;
   color: var(--text-primary);
+}
+
+/* Tooltip Popup on Hover */
+.metadata-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  width: 220px;
+  text-align: left;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms;
+  z-index: 50;
+  font-family: var(--font-sans);
+}
+
+.metadata-tooltip-title {
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 3px;
+  display: block;
+}
+
+.metadata-tooltip-desc {
+  font-size: 0.71875rem;
+  color: #cbd5e1;
+  display: block;
+  font-weight: 400;
+}
+
+.metadata-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #0f172a transparent transparent transparent;
+}
+
+/* Adjust alignment for 1st and 3rd column so tooltips stay inside card */
+.metadata-item:first-child .metadata-tooltip {
+  left: 0;
+  transform: translateX(0) translateY(4px);
+}
+.metadata-item:first-child:hover .metadata-tooltip {
+  transform: translateX(0) translateY(0);
+}
+.metadata-item:first-child .metadata-tooltip::after {
+  left: 24px;
+}
+
+.metadata-item:nth-child(2):hover .metadata-tooltip {
+  transform: translateX(-50%) translateY(0);
+}
+
+.metadata-item:last-child .metadata-tooltip {
+  left: auto;
+  right: 0;
+  transform: translateX(0) translateY(4px);
+}
+.metadata-item:last-child:hover .metadata-tooltip {
+  transform: translateX(0) translateY(0);
+}
+.metadata-item:last-child .metadata-tooltip::after {
+  left: auto;
+  right: 24px;
+}
+
+.metadata-item:hover .metadata-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Contrast Status Pill */

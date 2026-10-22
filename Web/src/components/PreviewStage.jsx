@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Cpu, Database, Binary, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Cpu, Database, Binary, CheckCircle2, ShieldAlert, HelpCircle } from 'lucide-react';
 import { createQrInstance } from '../utils/qrEngine';
 import { analyzeQRMetadata } from '../utils/metadata';
 import { checkContrast } from '../utils/contrast';
@@ -176,36 +176,66 @@ export default function PreviewStage({ config }) {
           <span>{contrastInfo.badgeText}</span>
         </div>
 
-        {/* Ringkasan Teknis Ringkas */}
+        {/* Ringkasan Teknis dengan Penjelasan Tooltip saat Kursor Diarahkan */}
         <div className="metadata-deck">
+          {/* Koreksi Eror */}
           <div className="metadata-item">
             <span className="metadata-label">
-              <Cpu size={11} style={{ display: 'inline', marginRight: '4px' }} />
-              Koreksi Eror
+              <span>
+                <Cpu size={11} style={{ display: 'inline', marginRight: '4px' }} />
+                Koreksi Eror
+              </span>
+              <HelpCircle size={11} className="metadata-info-icon" />
             </span>
             <span className="metadata-value">
               Level {effectiveEcc} ({metadata.eccPercent})
             </span>
+            <div className="metadata-tooltip">
+              <span className="metadata-tooltip-title">Daya Tahan Kerusakan</span>
+              <span className="metadata-tooltip-desc">
+                Tingkat ketahanan data jika QR tergores, kotor, atau tertutup logo di tengah. Level M aman hingga 15%, dan Level H aman hingga 30%.
+              </span>
+            </div>
           </div>
 
+          {/* Ukuran Grid */}
           <div className="metadata-item">
             <span className="metadata-label">
-              <Database size={11} style={{ display: 'inline', marginRight: '4px' }} />
-              Ukuran Grid
+              <span>
+                <Database size={11} style={{ display: 'inline', marginRight: '4px' }} />
+                Ukuran Grid
+              </span>
+              <HelpCircle size={11} className="metadata-info-icon" />
             </span>
             <span className="metadata-value">
               {metadata.dimensions}
             </span>
+            <div className="metadata-tooltip">
+              <span className="metadata-tooltip-title">Kerapatan Titik QR</span>
+              <span className="metadata-tooltip-desc">
+                Jumlah baris dan kolom titik. Semakin sedikit titiknya (seperti 21×21), semakin cepat dan mudah dibaca kamera HP dari jarak jauh.
+              </span>
+            </div>
           </div>
 
+          {/* Tipe Data */}
           <div className="metadata-item">
             <span className="metadata-label">
-              <Binary size={11} style={{ display: 'inline', marginRight: '4px' }} />
-              Tipe Data
+              <span>
+                <Binary size={11} style={{ display: 'inline', marginRight: '4px' }} />
+                Tipe Data
+              </span>
+              <HelpCircle size={11} className="metadata-info-icon" />
             </span>
             <span className="metadata-value">
               {metadata.mode}
             </span>
+            <div className="metadata-tooltip">
+              <span className="metadata-tooltip-title">Format Karakter</span>
+              <span className="metadata-tooltip-desc">
+                Format karakter data. Byte (UTF-8) mendukung semua huruf besar/kecil, angka, simbol link, hingga emoji secara universal.
+              </span>
+            </div>
           </div>
         </div>
       </div>
