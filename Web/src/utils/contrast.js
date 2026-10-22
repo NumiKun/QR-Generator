@@ -27,7 +27,7 @@ export function checkContrast(foreground, background, isTransparent = false) {
       return {
         ratio,
         status: 'pass',
-        label: `Kontras Bagus (${ratio}:1)`,
+        label: 'Kontras Bagus',
         badgeText: 'Sangat Mudah Di-scan',
         isPassing: true,
       };
@@ -35,7 +35,7 @@ export function checkContrast(foreground, background, isTransparent = false) {
       return {
         ratio,
         status: 'pass',
-        label: `Kontras Cukup (${ratio}:1)`,
+        label: 'Kontras Cukup',
         badgeText: 'Bisa Di-scan',
         isPassing: true,
       };
@@ -43,7 +43,7 @@ export function checkContrast(foreground, background, isTransparent = false) {
       return {
         ratio,
         status: 'warning',
-        label: `Kurang Kontras (${ratio}:1)`,
+        label: 'Kurang Kontras',
         badgeText: 'Kamera Mungkin Sulit Membaca',
         isPassing: false,
       };

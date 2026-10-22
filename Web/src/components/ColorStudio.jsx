@@ -43,8 +43,11 @@ export default function ColorStudio({
         </div>
 
         {/* Indikator Keterbacaan Warna */}
-        <div className={`contrast-badge ${contrastInfo.status}`}>
-          {contrastInfo.isPassing ? <CheckCircle2 size={13} /> : <ShieldAlert size={13} />}
+        <div
+          className={`contrast-badge ${contrastInfo.status}`}
+          title={`Rasio kontras warna: ${contrastInfo.ratio}:1`}
+        >
+          {contrastInfo.isPassing ? <CheckCircle2 size={12} /> : <ShieldAlert size={12} />}
           <span>{contrastInfo.label}</span>
         </div>
       </div>
