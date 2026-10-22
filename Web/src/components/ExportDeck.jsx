@@ -6,10 +6,9 @@ export default function ExportDeck({ config, onOpenPrint }) {
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(null);
 
-  // Keyboard shortcut listener for Ctrl+C / Cmd+C
+  // Shortcut keyboard untuk Ctrl+C / Cmd+C
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Don't intercept if user is typing inside an input or textarea
       const targetTag = e.target?.tagName?.toLowerCase();
       if (targetTag === 'input' || targetTag === 'textarea') return;
 
@@ -29,7 +28,7 @@ export default function ExportDeck({ config, onOpenPrint }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } else {
-      alert('Clipboard copy is not supported or permission denied in this browser.');
+      alert('Browser tidak mendukung salin langsung gambar ke clipboard.');
     }
   };
 
@@ -53,9 +52,9 @@ export default function ExportDeck({ config, onOpenPrint }) {
 
   return (
     <div style={{ width: '100%', marginTop: '20px' }}>
-      {/* Primary Export Actions */}
+      {/* Tombol Aksi Ekspor */}
       <div className="action-grid">
-        {/* Copy to Clipboard */}
+        {/* Salin ke Clipboard */}
         <button
           className="btn-secondary btn-full"
           onClick={handleCopyClipboard}
@@ -63,54 +62,54 @@ export default function ExportDeck({ config, onOpenPrint }) {
         >
           {copied ? (
             <>
-              <Check size={16} style={{ color: '#10b981' }} />
-              <span style={{ color: '#10b981' }}>Copied to Clipboard!</span>
+              <Check size={16} style={{ color: '#059669' }} />
+              <span style={{ color: '#059669' }}>Gambar Berhasil Disalin!</span>
             </>
           ) : (
             <>
               <Copy size={16} />
-              <span>Copy to Clipboard (⌘C / Ctrl+C)</span>
+              <span>Salin Gambar (Ctrl+C)</span>
             </>
           )}
         </button>
 
-        {/* 4K Raster PNG */}
+        {/* PNG Resolusi Tinggi (4K) */}
         <button
           className="btn-primary"
           onClick={() => handleDownloadPng(2048, '4K')}
           disabled={exporting !== null}
         >
           <Sparkles size={16} />
-          <span>{exporting === '4K' ? 'Generating...' : 'Export 4K PNG'}</span>
+          <span>{exporting === '4K' ? 'Menyiapkan...' : 'Unduh PNG (4K)'}</span>
         </button>
 
-        {/* Clean Vector SVG */}
+        {/* Vektor SVG */}
         <button
           className="btn-secondary"
           onClick={handleDownloadSvg}
           disabled={exporting !== null}
         >
           <FileCode2 size={16} />
-          <span>{exporting === 'SVG' ? 'Exporting...' : 'Export SVG Vector'}</span>
+          <span>{exporting === 'SVG' ? 'Menyiapkan...' : 'Unduh Vektor (SVG)'}</span>
         </button>
 
-        {/* Standard PNG (1024) */}
+        {/* PNG Standar */}
         <button
           className="btn-secondary"
           onClick={() => handleDownloadPng(1024, '1024px')}
           disabled={exporting !== null}
         >
           <Download size={16} />
-          <span>PNG (1024px)</span>
+          <span>Unduh PNG (Standar)</span>
         </button>
 
-        {/* Print Sheet Utility */}
+        {/* Cetak A4 */}
         <button
           className="btn-secondary"
           onClick={onOpenPrint}
         >
           <Printer size={16} />
-          <span>Print Utility (A4)</span>
+          <span>Cetak Lembar A4</span>
         </button>
       </div>
     </div>

@@ -2,21 +2,21 @@ import React from 'react';
 import { Grid, Eye, Disc, Box, Circle, Sparkles, Layers } from 'lucide-react';
 
 const DOT_TYPES = [
-  { id: 'square', label: 'Classic Square', icon: Box },
-  { id: 'dots', label: 'Rounded Dots', icon: Disc },
-  { id: 'rounded', label: 'Smooth Pill', icon: Circle },
-  { id: 'classy-rounded', label: 'Liquid Fluid', icon: Sparkles },
+  { id: 'square', label: 'Kotak Klasik', icon: Box },
+  { id: 'dots', label: 'Titik Bulat', icon: Disc },
+  { id: 'rounded', label: 'Lonjong Halus', icon: Circle },
+  { id: 'classy-rounded', label: 'Cairan Halus', icon: Sparkles },
 ];
 
 const CORNER_SQUARE_TYPES = [
-  { id: 'square', label: 'Square' },
-  { id: 'extra-rounded', label: 'Rounded Square' },
-  { id: 'dot', label: 'Circular' },
+  { id: 'square', label: 'Kotak' },
+  { id: 'extra-rounded', label: 'Lengkung' },
+  { id: 'dot', label: 'Bulat' },
 ];
 
 const CORNER_DOT_TYPES = [
-  { id: 'square', label: 'Square' },
-  { id: 'dot', label: 'Circular Dot' },
+  { id: 'square', label: 'Kotak' },
+  { id: 'dot', label: 'Bulat' },
 ];
 
 export default function MatrixStudio({
@@ -35,17 +35,17 @@ export default function MatrixStudio({
             <Grid size={18} />
           </div>
           <div>
-            <h2 className="card-title">Matrix Geometry Studio</h2>
-            <p className="card-subtitle">Module patterns, outer eye frames & inner pupil styles</p>
+            <h2 className="card-title">Bentuk & Pola QR</h2>
+            <p className="card-subtitle">Pilih model titik dan bentuk sudut kode QR</p>
           </div>
         </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {/* Module Dot Shape */}
+        {/* Bentuk Titik QR */}
         <div>
           <label className="input-label" style={{ marginBottom: '10px' }}>
-            <span>Module Geometry Pattern</span>
+            <span>Model Titik Kode QR</span>
           </label>
           <div className="grid-4">
             {DOT_TYPES.map((item) => {
@@ -66,13 +66,13 @@ export default function MatrixStudio({
           </div>
         </div>
 
-        {/* Eye Shapes (Corner Frames and Corner Pupils) */}
+        {/* Bentuk Sudut Mata QR */}
         <div className="grid-2">
-          {/* Corner Eye Frame */}
+          {/* Bingkai Sudut Luar */}
           <div>
             <label className="input-label" style={{ marginBottom: '10px' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Eye size={14} /> Outer Eye Frame
+                <Eye size={14} /> Bingkai Sudut Luar
               </span>
             </label>
             <div className="grid-3">
@@ -88,11 +88,11 @@ export default function MatrixStudio({
             </div>
           </div>
 
-          {/* Corner Eye Pupil */}
+          {/* Titik Sudut Dalam */}
           <div>
             <label className="input-label" style={{ marginBottom: '10px' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Layers size={14} /> Inner Eye Pupil
+                <Layers size={14} /> Titik Sudut Dalam
               </span>
             </label>
             <div className="grid-2">

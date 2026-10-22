@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link2, AlignLeft, Upload, Wifi, X, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { getByteLength } from '../utils/metadata';
 
 export default function InputStudio({ payload, setPayload, inputMode, setInputMode }) {
   const [wifiData, setWifiData] = useState({
@@ -10,7 +9,6 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
     hidden: false,
   });
 
-  // Handle URL normalization
   const handleUrlChange = (val) => {
     setPayload(val);
   };
@@ -24,7 +22,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
     setPayload(clean);
   };
 
-  // Live URL validation check
+  // Validasi URL
   const isUrlValid = (url) => {
     if (!url) return false;
     try {
@@ -35,13 +33,13 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
     }
   };
 
-  // Image/File binary upload
+  // Unggah File / Gambar
   const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     if (file.size > 2500) {
-      alert(`Peringatan: Ukuran file (${Math.round(file.size / 1024)} KB) melebihi kapasitas standar QR code (~2.5 KB). Kamera scanner mungkin kesulitan membacanya.`);
+      alert(`Peringatan: Ukuran file (${Math.round(file.size / 1024)} KB) terlalu besar untuk QR code. Kamera HP mungkin akan sulit memindainya. Disarankan di bawah 2 KB.`);
     }
 
     const reader = new FileReader();
@@ -53,7 +51,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
     reader.readAsDataURL(file);
   };
 
-  // Handle WiFi payload formatting: WIFI:S:MySSID;T:WPA;P:MyPassword;H:false;;
+  // Format Wi-Fi: WIFI:S:MySSID;T:WPA;P:MyPassword;H:false;;
   const updateWifiPayload = (updated) => {
     setWifiData(updated);
     const { ssid, password, encryption, hidden } = updated;
@@ -66,7 +64,6 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
   };
 
   const charCount = payload ? payload.length : 0;
-  const byteCount = getByteLength(payload);
 
   return (
     <section className="studio-card">
@@ -76,13 +73,13 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
             <Link2 size={18} />
           </div>
           <div>
-            <h2 className="card-title">Input Channel & Payload</h2>
-            <p className="card-subtitle">Zero-telemetry client-side payload management</p>
+            <h2 className="card-title">Isi Konten QR Code</h2>
+            <p className="card-subtitle">Pilih jenis tautan atau data yang ingin dimasukkan</p>
           </div>
         </div>
       </div>
 
-      {/* Segmented Mode Selector */}
+      {/* Tab Pilihan Mode */}
       <div className="segmented-tabs">
         <button
           className={`tab-btn ${inputMode === 'url' ? 'active' : ''}`}
@@ -94,7 +91,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           }}
         >
           <Link2 size={15} />
-          <span>URL Link</span>
+          <span>Tautan / Link</span>
         </button>
 
         <button
@@ -105,7 +102,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           }}
         >
           <AlignLeft size={15} />
-          <span>Plain Text</span>
+          <span>Teks Biasa</span>
         </button>
 
         <button
@@ -124,24 +121,24 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
           onClick={() => setInputMode('file')}
         >
           <Upload size={15} />
-          <span>File / Image</span>
+          <span>File / Gambar</span>
         </button>
       </div>
 
-      {/* URL Mode */}
+      {/* Mode URL / Link */}
       {inputMode === 'url' && (
         <div className="input-group">
           <div className="input-label">
-            <span>Destination Website / Endpoint</span>
+            <span>Alamat Website atau Link Tujuan</span>
             {payload && (
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}>
                 {isUrlValid(payload) ? (
-                  <span style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <CheckCircle2 size={13} /> Valid URL
+                  <span style={{ color: '#059669', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <CheckCircle2 size={13} /> Link Valid
                   </span>
                 ) : (
-                  <span style={{ color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <AlertCircle size={13} /> Incomplete URL
+                  <span style={{ color: '#d97706', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <AlertCircle size={13} /> Link Belum Lengkap
                   </span>
                 )}
               </span>
@@ -151,7 +148,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
             <input
               type="text"
               className="text-input"
-              placeholder="https://yourbrand.com/campaign"
+              placeholder="https://website-kamu.com"
               value={payload}
               onChange={(e) => handleUrlChange(e.target.value)}
               onBlur={handleNormalizeUrl}
@@ -160,30 +157,30 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               <button
                 className="input-clear-btn"
                 onClick={() => setPayload('')}
-                title="Clear input"
+                title="Hapus teks"
               >
                 <X size={16} />
               </button>
             )}
           </div>
           <div className="byte-counter-bar">
-            <span>Auto-normalized on blur</span>
-            <span>{charCount} chars • {byteCount} bytes</span>
+            <span></span>
+            <span>{charCount} karakter</span>
           </div>
         </div>
       )}
 
-      {/* Plain Text Mode */}
+      {/* Mode Teks Biasa */}
       {inputMode === 'text' && (
         <div className="input-group">
           <div className="input-label">
-            <span>Text Content / Notes / Message</span>
-            <span>{charCount} chars • {byteCount} bytes</span>
+            <span>Pesan atau Catatan Teks</span>
+            <span>{charCount} karakter</span>
           </div>
           <div className="input-wrapper">
             <textarea
               className="textarea-input"
-              placeholder="Enter multi-line text, instructions, or raw payloads..."
+              placeholder="Ketik teks pesan, pengumuman, atau catatan di sini..."
               value={payload}
               onChange={(e) => setPayload(e.target.value)}
             />
@@ -192,56 +189,56 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
                 className="input-clear-btn"
                 style={{ top: '12px' }}
                 onClick={() => setPayload('')}
-                title="Clear input"
+                title="Hapus teks"
               >
                 <X size={16} />
               </button>
             )}
           </div>
           <div className="byte-counter-bar">
-            <span>Supports UTF-8 multi-byte encoding</span>
-            <span style={{ color: byteCount > 1500 ? '#ef4444' : 'var(--text-muted)' }}>
-              {byteCount > 1500 ? 'High density (scan speed may reduce)' : 'Optimal density'}
+            <span></span>
+            <span style={{ color: charCount > 500 ? '#dc2626' : 'var(--text-muted)' }}>
+              {charCount > 500 ? 'Teks cukup panjang (QR akan lebih padat)' : `${charCount} karakter`}
             </span>
           </div>
         </div>
       )}
 
-      {/* Wi-Fi Mode */}
+      {/* Mode Wi-Fi */}
       {inputMode === 'wifi' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <div className="grid-2">
             <div className="input-group">
-              <label className="input-label">Network Name (SSID)</label>
+              <label className="input-label">Nama Wi-Fi (SSID)</label>
               <input
                 type="text"
                 className="text-input"
-                placeholder="MyOffice_WiFi"
+                placeholder="Contoh: WiFi_Rumah"
                 value={wifiData.ssid}
                 onChange={(e) => updateWifiPayload({ ...wifiData, ssid: e.target.value })}
               />
             </div>
             <div className="input-group">
-              <label className="input-label">Security</label>
+              <label className="input-label">Tipe Keamanan</label>
               <select
                 className="text-input"
                 value={wifiData.encryption}
                 onChange={(e) => updateWifiPayload({ ...wifiData, encryption: e.target.value })}
               >
-                <option value="WPA">WPA / WPA2 / WPA3 (Default)</option>
+                <option value="WPA">WPA / WPA2 (Umum digunakan)</option>
                 <option value="WEP">WEP</option>
-                <option value="nopass">No Password (Open)</option>
+                <option value="nopass">Tanpa Password (Terbuka)</option>
               </select>
             </div>
           </div>
 
           {wifiData.encryption !== 'nopass' && (
             <div className="input-group">
-              <label className="input-label">Wi-Fi Password</label>
+              <label className="input-label">Kata Sandi Wi-Fi</label>
               <input
                 type="text"
                 className="text-input"
-                placeholder="SuperSecretPassword123"
+                placeholder="Masukkan sandi Wi-Fi..."
                 value={wifiData.password}
                 onChange={(e) => updateWifiPayload({ ...wifiData, password: e.target.value })}
               />
@@ -256,15 +253,15 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               onChange={(e) => updateWifiPayload({ ...wifiData, hidden: e.target.checked })}
               style={{ cursor: 'pointer' }}
             />
-            <label htmlFor="hidden-wifi" style={{ cursor: 'pointer' }}>Hidden Network (SSID broadcast disabled)</label>
+            <label htmlFor="hidden-wifi" style={{ cursor: 'pointer' }}>Jaringan tersembunyi (Hidden SSID)</label>
           </div>
         </div>
       )}
 
-      {/* File / Image Upload Mode */}
+      {/* Mode File / Gambar */}
       {inputMode === 'file' && (
         <div className="input-group">
-          <label className="input-label">Local File / Image Ingestion</label>
+          <label className="input-label">Unggah Gambar atau File</label>
           <div
             style={{
               border: '2px dashed var(--border-default)',
@@ -282,9 +279,9 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
             onClick={() => document.getElementById('payload-file-input')?.click()}
           >
             <Upload size={28} style={{ color: 'var(--color-primary)' }} />
-            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Click to browse or drop small image/file</span>
+            <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Klik untuk memilih gambar atau file</span>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              Encodes to client-side Base64 Data URI (recommended &lt; 2KB for optimal mobile scanning)
+              Disarankan ukuran file di bawah 2 KB agar kamera HP mudah membaca saat di-scan
             </span>
             <input
               id="payload-file-input"
@@ -296,12 +293,12 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
 
           {payload && payload.startsWith('data:') && (
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', fontSize: '0.75rem' }}>
-              <span style={{ color: '#10b981' }}>File loaded into local memory</span>
+              <span style={{ color: '#059669', fontWeight: 600 }}>File berhasil dimuat</span>
               <button
                 onClick={() => setPayload('')}
-                style={{ color: '#ef4444', textDecoration: 'underline' }}
+                style={{ color: '#dc2626', textDecoration: 'underline', fontWeight: 600 }}
               >
-                Remove payload
+                Hapus file
               </button>
             </div>
           )}

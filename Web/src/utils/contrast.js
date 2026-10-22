@@ -4,11 +4,11 @@ import a11yPlugin from 'colord/plugins/a11y';
 extend([a11yPlugin]);
 
 /**
- * Calculates WCAG contrast ratio and scannability score between foreground and background colors
- * @param {string} foreground - Hex color of QR modules
- * @param {string} background - Hex color of QR background
- * @param {boolean} isTransparent - Whether transparent background is enabled
- * @returns {object} { ratio, status, label, isPassing }
+ * Menghitung rasio kontras warna untuk memastikan QR code mudah dibaca kamera
+ * @param {string} foreground - Warna kode QR
+ * @param {string} background - Warna latar belakang
+ * @param {boolean} isTransparent - Apakah latar transparan
+ * @returns {object} { ratio, status, label, badgeText, isPassing }
  */
 export function checkContrast(foreground, background, isTransparent = false) {
   try {
@@ -17,38 +17,38 @@ export function checkContrast(foreground, background, isTransparent = false) {
     const bg = colord(effectiveBg);
 
     if (!fg.isValid() || !bg.isValid()) {
-      return { ratio: 21, status: 'pass', label: 'Valid', isPassing: true };
+      return { ratio: 21, status: 'pass', label: 'Warna Jelas', badgeText: 'Mudah Di-scan', isPassing: true };
     }
 
     const ratio = Math.round(fg.contrast(bg) * 10) / 10;
 
-    // QR scanners generally require minimum 4.5:1, ideally >7:1
+    // Ambang batas scannability kamera
     if (ratio >= 7) {
       return {
         ratio,
         status: 'pass',
-        label: `WCAG AAA (${ratio}:1)`,
-        badgeText: 'Optimal Scannability',
+        label: `Kontras Bagus (${ratio}:1)`,
+        badgeText: 'Sangat Mudah Di-scan',
         isPassing: true,
       };
     } else if (ratio >= 4.5) {
       return {
         ratio,
         status: 'pass',
-        label: `WCAG AA (${ratio}:1)`,
-        badgeText: 'Good Scannability',
+        label: `Kontras Cukup (${ratio}:1)`,
+        badgeText: 'Bisa Di-scan',
         isPassing: true,
       };
     } else {
       return {
         ratio,
         status: 'warning',
-        label: `Low Contrast (${ratio}:1)`,
-        badgeText: 'May Fail Scanner Camera',
+        label: `Kurang Kontras (${ratio}:1)`,
+        badgeText: 'Kamera Mungkin Sulit Membaca',
         isPassing: false,
       };
     }
   } catch {
-    return { ratio: 21, status: 'pass', label: 'WCAG AAA (21:1)', badgeText: 'Optimal', isPassing: true };
+    return { ratio: 21, status: 'pass', label: 'Warna Jelas', badgeText: 'Mudah Di-scan', isPassing: true };
   }
 }

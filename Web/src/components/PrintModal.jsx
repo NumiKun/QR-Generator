@@ -1,8 +1,8 @@
 import React from 'react';
-import { Printer, X, FileText } from 'lucide-react';
+import { Printer, X } from 'lucide-react';
 
 export default function PrintModal({ config, onClose }) {
-  const { payload, ctaText } = config;
+  const { ctaText } = config;
 
   const handleTriggerPrint = () => {
     window.print();
@@ -17,8 +17,8 @@ export default function PrintModal({ config, onClose }) {
               <Printer size={20} />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: 700 }}>Print Utility — A4 / Letter Standee</h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Ready for immediate physical signage deployment</p>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: 700 }}>Cetak Lembar Siap Tempel (A4)</h3>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Cetak langsung untuk ditempel di meja kasir, etalase, atau dinding</p>
             </div>
           </div>
           <button onClick={onClose} style={{ color: 'var(--text-muted)' }}>
@@ -26,7 +26,7 @@ export default function PrintModal({ config, onClose }) {
           </button>
         </div>
 
-        {/* Print Preview Container */}
+        {/* Wadah Pratinjau Cetak */}
         <div
           id="print-sheet-preview"
           style={{
@@ -34,7 +34,7 @@ export default function PrintModal({ config, onClose }) {
             color: '#0f172a',
             padding: '36px 24px',
             borderRadius: 'var(--radius-lg)',
-            border: '1px solid var(--border-default)',
+            border: '1.5px solid var(--border-subtle)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -59,25 +59,24 @@ export default function PrintModal({ config, onClose }) {
               display: 'inline-block',
             }}
           >
-            {/* The QR SVG clone will be displayed here */}
             <div style={{ width: '220px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
-                [QR Code Printable Area]
+                [Area Cetak QR Code]
               </span>
             </div>
           </div>
 
           <div style={{ fontSize: '0.75rem', color: '#94a3b8', borderTop: '1px solid #e2e8f0', paddingTop: '12px', width: '100%' }}>
-            Generated with AnyQR Precision Studio • 100% Client-Side Integrity
+            Dibuat secara instan dengan AnyQR
           </div>
         </div>
 
         <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
           <button className="btn-secondary" onClick={onClose}>
-            Cancel
+            Batal
           </button>
           <button className="btn-primary" onClick={handleTriggerPrint}>
-            <Printer size={16} /> Print Sheet (A4)
+            <Printer size={16} /> Cetak Sekarang (A4)
           </button>
         </div>
       </div>

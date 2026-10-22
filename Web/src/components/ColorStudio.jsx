@@ -3,20 +3,20 @@ import { Palette, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { checkContrast } from '../utils/contrast';
 
 const PRESET_FOREGROUNDS = [
-  { label: 'Obsidian', color: '#0F172A' },
-  { label: 'AnyQR Indigo', color: '#4F46E5' },
-  { label: 'Emerald', color: '#059669' },
-  { label: 'Royal Violet', color: '#7C3AED' },
-  { label: 'Sunset Crimson', color: '#E11D48' },
-  { label: 'Classic Black', color: '#000000' },
+  { label: 'Hitam Pekat', color: '#0F172A' },
+  { label: 'Biru AnyQR', color: '#4F46E5' },
+  { label: 'Hijau Emerald', color: '#059669' },
+  { label: 'Ungu Elegan', color: '#7C3AED' },
+  { label: 'Merah Crimson', color: '#E11D48' },
+  { label: 'Hitam Klasik', color: '#000000' },
 ];
 
 const PRESET_BACKGROUNDS = [
-  { label: 'Pure White', color: '#FFFFFF' },
-  { label: 'Slate Soft', color: '#F8FAFC' },
-  { label: 'Cream Ivory', color: '#FEF9C3' },
-  { label: 'Ice Blue', color: '#EFF6FF' },
-  { label: 'Dark Studio', color: '#0F172A' },
+  { label: 'Putih Bersih', color: '#FFFFFF' },
+  { label: 'Abu Lembut', color: '#F8FAFC' },
+  { label: 'Kuning Krem', color: '#FEF9C3' },
+  { label: 'Biru Es', color: '#EFF6FF' },
+  { label: 'Gelap Pekat', color: '#0F172A' },
 ];
 
 export default function ColorStudio({
@@ -37,12 +37,12 @@ export default function ColorStudio({
             <Palette size={18} />
           </div>
           <div>
-            <h2 className="card-title">Color Palette & Contrast</h2>
-            <p className="card-subtitle">WCAG compliance threshold & alpha preservation</p>
+            <h2 className="card-title">Warna QR Code</h2>
+            <p className="card-subtitle">Atur warna titik dan latar belakang agar mudah dipindai</p>
           </div>
         </div>
 
-        {/* Contrast Badge */}
+        {/* Indikator Keterbacaan Warna */}
         <div className={`contrast-badge ${contrastInfo.status}`}>
           {contrastInfo.isPassing ? <CheckCircle2 size={13} /> : <ShieldAlert size={13} />}
           <span>{contrastInfo.label}</span>
@@ -50,9 +50,9 @@ export default function ColorStudio({
       </div>
 
       <div className="grid-2">
-        {/* Foreground Matrix Color */}
+        {/* Warna Titik QR */}
         <div className="input-group">
-          <label className="input-label">Matrix Foreground Color</label>
+          <label className="input-label">Warna Titik QR</label>
           <div className="color-picker-control">
             <input
               type="color"
@@ -82,10 +82,10 @@ export default function ColorStudio({
           </div>
         </div>
 
-        {/* Background Color */}
+        {/* Warna Latar Belakang */}
         <div className="input-group">
           <div className="input-label">
-            <span>Background Color</span>
+            <span>Warna Latar Belakang</span>
             <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '0.75rem' }}>
               <input
                 type="checkbox"
@@ -93,7 +93,7 @@ export default function ColorStudio({
                 onChange={(e) => setIsTransparent(e.target.checked)}
                 style={{ cursor: 'pointer' }}
               />
-              <span>Transparent</span>
+              <span>Latar Transparan</span>
             </label>
           </div>
 
@@ -111,7 +111,7 @@ export default function ColorStudio({
             <input
               type="text"
               className="hex-text-input"
-              value={isTransparent ? 'TRANSPARENT' : bgColor}
+              value={isTransparent ? 'TRANSPARAN' : bgColor}
               onChange={(e) => setBgColor(e.target.value)}
               disabled={isTransparent}
               maxLength={7}
@@ -123,7 +123,7 @@ export default function ColorStudio({
               <button
                 key={chip.color}
                 className={`palette-chip-btn ${!isTransparent && bgColor.toLowerCase() === chip.color.toLowerCase() ? 'active' : ''}`}
-                style={{ backgroundColor: chip.color, border: '1px solid rgba(255,255,255,0.2)' }}
+                style={{ backgroundColor: chip.color, border: '1px solid rgba(0,0,0,0.1)' }}
                 onClick={() => {
                   setBgColor(chip.color);
                   setIsTransparent(false);
@@ -135,7 +135,7 @@ export default function ColorStudio({
         </div>
       </div>
 
-      {/* Warning Alert if contrast is bad */}
+      {/* Peringatan jika warna kurang kontras */}
       {!contrastInfo.isPassing && (
         <div style={{
           marginTop: '16px',
@@ -151,7 +151,7 @@ export default function ColorStudio({
         }}>
           <ShieldAlert size={18} style={{ flexShrink: 0 }} />
           <span>
-            <strong>Peringatan Kontras Rendah:</strong> Rasio kontras ({contrastInfo.ratio}:1) berada di bawah ambang scannability WCAG 4.5:1. Kamera smartphone mungkin gagal membaca QR Code ini.
+            <strong>Perhatian:</strong> Warna kode QR dan latar belakang terlalu mirip. Kamera HP mungkin akan sulit membaca QR Code ini. Cobalah pilih warna yang lebih gelap untuk titik QR atau lebih terang untuk latar.
           </span>
         </div>
       )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image as ImageIcon, Upload, X, ShieldCheck, Sliders } from 'lucide-react';
+import { Image as ImageIcon, Upload, X, ShieldCheck } from 'lucide-react';
 
 export default function LogoStudio({
   logoUrl,
@@ -19,7 +19,6 @@ export default function LogoStudio({
     reader.onload = (ev) => {
       if (ev.target?.result) {
         setLogoUrl(ev.target.result);
-        // PRD Section 3.3: Auto-switch to H (30%) when logo is active
         setEccLevel('H');
       }
     };
@@ -38,15 +37,15 @@ export default function LogoStudio({
             <ImageIcon size={18} />
           </div>
           <div>
-            <h2 className="card-title">Logo & Insignia Embedding</h2>
-            <p className="card-subtitle">Safe module clearing margin & automatic H-ECC fail-safe</p>
+            <h2 className="card-title">Sisipkan Logo di Tengah</h2>
+            <p className="card-subtitle">Tambahkan logo agar QR Code lebih menarik dan mudah dikenali</p>
           </div>
         </div>
 
         {logoUrl && (
           <div className="contrast-badge pass" style={{ fontSize: '0.6875rem' }}>
             <ShieldCheck size={13} />
-            <span>Auto-ECC High (30%) Active</span>
+            <span>Koreksi Eror Tinggi (Aman Di-scan)</span>
           </div>
         )}
       </div>
@@ -69,9 +68,9 @@ export default function LogoStudio({
           onClick={() => document.getElementById('logo-upload-input')?.click()}
         >
           <Upload size={24} style={{ color: 'var(--color-primary)' }} />
-          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Upload Brand Logo or Icon</span>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Pilih File Logo atau Gambar</span>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-            Supports SVG, PNG, WebP with transparency. Processed 100% locally.
+            Mendukung file PNG, SVG, JPG, atau WebP (disarankan logo berlatar transparan)
           </span>
           <input
             id="logo-upload-input"
@@ -83,33 +82,33 @@ export default function LogoStudio({
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Logo preview thumbnail & remove */}
+          {/* Pratinjau Logo & Tombol Hapus */}
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            background: 'var(--bg-input)',
+            background: '#ffffff',
             padding: '12px 16px',
             borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-subtle)',
+            border: '1.5px solid var(--border-subtle)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div style={{
-                width: '40px',
-                height: '40px',
+                width: '42px',
+                height: '42px',
                 borderRadius: 'var(--radius-sm)',
-                background: '#ffffff',
+                background: '#f8fafc',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '4px',
-                boxShadow: 'var(--shadow-sm)',
+                border: '1px solid var(--border-subtle)',
               }}>
-                <img src={logoUrl} alt="Logo Preview" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                <img src={logoUrl} alt="Pratinjau Logo" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
               </div>
               <div>
-                <span style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block' }}>Active Brand Insignia</span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Centered with safe clearance</span>
+                <span style={{ fontSize: '0.8125rem', fontWeight: 600, display: 'block' }}>Logo Terpasang</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Otomatis berada di tengah QR Code</span>
               </div>
             </div>
 
@@ -120,21 +119,22 @@ export default function LogoStudio({
                 alignItems: 'center',
                 gap: '4px',
                 fontSize: '0.75rem',
-                color: '#ef4444',
-                padding: '6px 10px',
+                fontWeight: 600,
+                color: '#dc2626',
+                padding: '6px 12px',
                 borderRadius: 'var(--radius-sm)',
-                border: '1px solid rgba(239, 68, 68, 0.25)',
-                background: 'rgba(239, 68, 68, 0.08)',
+                border: '1px solid #fecaca',
+                background: '#fef2f2',
               }}
             >
-              <X size={14} /> Remove
+              <X size={14} /> Hapus Logo
             </button>
           </div>
 
-          {/* Scale Slider */}
+          {/* Slider Ukuran Logo */}
           <div className="slider-control">
             <div className="slider-header">
-              <span>Logo Scale Proportion (Safe bounds: 15% - 35%)</span>
+              <span>Ukuran Logo</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{Math.round(logoScale * 100)}%</span>
             </div>
             <input
@@ -148,10 +148,10 @@ export default function LogoStudio({
             />
           </div>
 
-          {/* Safe Module Margin Slider */}
+          {/* Slider Jarak Ruang Sekitar Logo */}
           <div className="slider-control">
             <div className="slider-header">
-              <span>Safe Module Clearing Margin</span>
+              <span>Jarak Ruang Sekitar Logo</span>
               <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{logoMargin}px</span>
             </div>
             <input

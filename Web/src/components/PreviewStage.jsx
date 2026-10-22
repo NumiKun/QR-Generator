@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ShieldCheck, Cpu, Database, Binary, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { Cpu, Database, Binary, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { createQrInstance } from '../utils/qrEngine';
 import { analyzeQRMetadata } from '../utils/metadata';
 import { checkContrast } from '../utils/contrast';
@@ -28,7 +28,7 @@ export default function PreviewStage({ config }) {
   const metadata = analyzeQRMetadata(payload, effectiveEcc);
   const contrastInfo = checkContrast(fgColor, bgColor, isTransparent);
 
-  // Initialize or update QR instance
+  // Inisialisasi atau pembaruan mesin QR
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -86,13 +86,13 @@ export default function PreviewStage({ config }) {
   return (
     <div className="preview-sticky-stage">
       <div className="stage-card">
-        {/* Live Vector Stage Indicator */}
+        {/* Label Pratinjau */}
         <div className="stage-badge-live">
           <span className="pulse-dot"></span>
-          <span>Live Vector Stage</span>
+          <span>Pratinjau Langsung</span>
         </div>
 
-        {/* QR Preview Wrapper with CTA Frames */}
+        {/* Kotak Pratinjau QR Code dengan Bingkai CTA */}
         <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {ctaFrame === 'top-header' && (
             <div style={{
@@ -125,7 +125,7 @@ export default function PreviewStage({ config }) {
               <div style={{
                 width: '40px',
                 height: '4px',
-                background: 'rgba(0,0,0,0.2)',
+                background: 'rgba(0,0,0,0.15)',
                 borderRadius: '4px',
                 marginBottom: '14px',
               }} />
@@ -170,38 +170,38 @@ export default function PreviewStage({ config }) {
           )}
         </div>
 
-        {/* Contrast Scannability Indicator */}
+        {/* Indikator Kemudahan Scan */}
         <div className={`contrast-badge ${contrastInfo.status}`} style={{ marginTop: '16px' }}>
           {contrastInfo.isPassing ? <CheckCircle2 size={13} /> : <ShieldAlert size={13} />}
-          <span>{contrastInfo.badgeText} ({contrastInfo.ratio}:1)</span>
+          <span>{contrastInfo.badgeText}</span>
         </div>
 
-        {/* Technical Metadata Readout Deck */}
+        {/* Ringkasan Teknis Ringkas */}
         <div className="metadata-deck">
           <div className="metadata-item">
             <span className="metadata-label">
               <Cpu size={11} style={{ display: 'inline', marginRight: '4px' }} />
-              ECC Level
+              Koreksi Eror
             </span>
             <span className="metadata-value">
-              {effectiveEcc} ({metadata.eccPercent})
+              Level {effectiveEcc} ({metadata.eccPercent})
             </span>
           </div>
 
           <div className="metadata-item">
             <span className="metadata-label">
               <Database size={11} style={{ display: 'inline', marginRight: '4px' }} />
-              QR Version
+              Ukuran Grid
             </span>
             <span className="metadata-value">
-              v{metadata.version} ({metadata.dimensions})
+              {metadata.dimensions}
             </span>
           </div>
 
           <div className="metadata-item">
             <span className="metadata-label">
               <Binary size={11} style={{ display: 'inline', marginRight: '4px' }} />
-              Encoding
+              Tipe Data
             </span>
             <span className="metadata-value">
               {metadata.mode}
