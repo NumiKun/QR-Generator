@@ -955,38 +955,107 @@ button {
   color: var(--text-primary);
 }
 
-/* Print Specific Utility */
+/* Print Specific Utility for Single-Page A4 Print */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
 @media print {
-  body {
+  /* Reset document root to single-page flow */
+  html, body {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
     background: #ffffff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
-  body * {
-    visibility: hidden;
+
+  /* Completely remove whole site UI, header, and studios from print tree */
+  .app-header,
+  .studio-layout,
+  .no-print,
+  .modal-header-bar,
+  .modal-footer-bar {
+    display: none !important;
   }
-  #print-sheet-preview, #print-sheet-preview *,
-  .printable-sheet, .printable-sheet * {
-    visibility: visible;
+
+  .app-shell {
+    min-height: 0 !important;
+    height: auto !important;
+    display: block !important;
   }
-  #print-sheet-preview,
-  .printable-sheet {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background: #ffffff !important;
-    color: #000000 !important;
-    padding: 40px;
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+
+  /* Flatten modal wrapper so it occupies zero extra pages */
+  .modal-overlay {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .modal-content {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
     box-shadow: none !important;
     border: none !important;
+    overflow: visible !important;
   }
-  .modal-overlay {
-    background: transparent !important;
-    position: static !important;
-    padding: 0 !important;
+
+  /* Single-page printable sheet container */
+  #print-sheet-preview {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 580px !important;
+    margin: 20px auto 0 !important;
+    padding: 36px 28px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 2px dashed #94a3b8 !important;
+    border-radius: 20px !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+    page-break-before: avoid !important;
+    break-before: avoid !important;
+  }
+
+  #print-qr-target {
+    border: 2px solid #cbd5e1 !important;
+    border-radius: 16px !important;
+    padding: 18px !important;
+    margin-bottom: 20px !important;
+    background: #ffffff !important;
+  }
+
+  #print-qr-target img {
+    width: 240px !important;
+    height: auto !important;
+    max-height: 300px !important;
+    display: block !important;
+    object-fit: contain !important;
   }
 }
 
