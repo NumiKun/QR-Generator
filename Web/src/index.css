@@ -957,12 +957,17 @@ button {
 
 /* Print Specific Utility */
 @media print {
+  body {
+    background: #ffffff !important;
+  }
   body * {
     visibility: hidden;
   }
+  #print-sheet-preview, #print-sheet-preview *,
   .printable-sheet, .printable-sheet * {
     visibility: visible;
   }
+  #print-sheet-preview,
   .printable-sheet {
     position: absolute;
     left: 0;
@@ -975,6 +980,13 @@ button {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  .modal-overlay {
+    background: transparent !important;
+    position: static !important;
+    padding: 0 !important;
   }
 }
 

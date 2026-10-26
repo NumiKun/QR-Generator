@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Printer, X } from 'lucide-react';
+import { getCompositeDataUrl } from '../utils/qrEngine';
 
 export default function PrintModal({ config, onClose }) {
   const { ctaText } = config;
+  const [previewImgUrl, setPreviewImgUrl] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    getCompositeDataUrl(config, 600).then((url) => {
+      if (isMounted) setPreviewImgUrl(url);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [config]);
 
   const handleTriggerPrint = () => {
     window.print();
@@ -57,13 +69,28 @@ export default function PrintModal({ config, onClose }) {
               borderRadius: '16px',
               marginBottom: '20px',
               display: 'inline-block',
+              background: '#ffffff',
             }}
           >
-            <div style={{ width: '220px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
-                [Area Cetak QR Code]
-              </span>
-            </div>
+            {previewImgUrl ? (
+              <img
+                src={previewImgUrl}
+                alt="QR Code"
+                style={{
+                  width: '240px',
+                  height: 'auto',
+                  maxHeight: '320px',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            ) : (
+              <div style={{ width: '220px', height: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                  Menyiapkan Pratinjau Cetak...
+                </span>
+              </div>
+            )}
           </div>
 
           <div style={{ fontSize: '0.75rem', color: '#94a3b8', borderTop: '1px solid #e2e8f0', paddingTop: '12px', width: '100%' }}>
