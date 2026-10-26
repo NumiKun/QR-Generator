@@ -958,7 +958,7 @@ button {
 /* Print Specific Utility for Single-Page A4 Print */
 @page {
   size: A4 portrait;
-  margin: 10mm;
+  margin: 0;
 }
 
 @media print {

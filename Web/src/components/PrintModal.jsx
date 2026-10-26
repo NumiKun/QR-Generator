@@ -17,7 +17,19 @@ export default function PrintModal({ config, onClose }) {
   }, [config]);
 
   const handleTriggerPrint = () => {
+    const originalTitle = document.title;
+    document.title = '';
+
+    const restoreTitle = () => {
+      document.title = originalTitle;
+      window.removeEventListener('afterprint', restoreTitle);
+    };
+    window.addEventListener('afterprint', restoreTitle);
+
     window.print();
+
+    // Fallback timer jika browser tidak memicu event afterprint
+    setTimeout(restoreTitle, 2000);
   };
 
   return (
