@@ -626,6 +626,86 @@ button {
   background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 }
 
+/* Phone Mockup Frame & CTA Styling */
+.qr-frame-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all var(--transition-normal);
+}
+
+.phone-mockup-frame {
+  width: 292px;
+  background: var(--bg-surface);
+  border: 10px solid #0f172a;
+  border-radius: 40px;
+  padding: 22px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 16px 36px -4px rgba(15, 23, 42, 0.16), 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+  position: relative;
+  margin: 10px 0 14px;
+}
+
+.phone-speaker-notch {
+  width: 50px;
+  height: 4.5px;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: var(--radius-full);
+  margin-bottom: 16px;
+}
+
+.phone-cta-label {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.qr-preview-box.in-phone {
+  width: 240px;
+  height: 240px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.qr-preview-box canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.cta-top-badge {
+  padding: 6px 20px;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
+.cta-bottom-badge {
+  padding: 6px 24px;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-top: 12px;
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+}
+
 /* Technical Metadata Readout Deck */
 .metadata-deck {
   width: 100%;

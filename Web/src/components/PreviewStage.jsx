@@ -71,6 +71,13 @@ export default function PreviewStage({ config }) {
           },
         });
       }
+
+      // Pastikan canvas tetap terpasang dengan benar di dalam containerRef
+      if (containerRef.current && !containerRef.current.contains(qrInstanceRef.current?._canvas)) {
+        containerRef.current.innerHTML = '';
+        qrInstanceRef.current.append(containerRef.current);
+      }
+
       setRenderError('');
     } catch (err) {
       console.warn('QR Render caught safe exception:', err);
@@ -88,6 +95,7 @@ export default function PreviewStage({ config }) {
     logoScale,
     logoMargin,
     effectiveEcc,
+    ctaFrame,
   ]);
 
   return (
@@ -102,85 +110,34 @@ export default function PreviewStage({ config }) {
         {/* Kotak Pratinjau QR Code dengan Bingkai CTA */}
         <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {ctaFrame === 'top-header' && (
-            <div style={{
-              background: fgColor,
-              color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
-              padding: '6px 20px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.8125rem',
-              fontWeight: 800,
-              letterSpacing: '0.06em',
-              marginBottom: '12px',
-              boxShadow: 'var(--shadow-sm)',
-            }}>
+            <div
+              className="cta-top-badge"
+              style={{
+                background: fgColor,
+                color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
+              }}
+            >
               {ctaText}
             </div>
           )}
 
-          {ctaFrame === 'phone-mockup' ? (
-            <div style={{
-              border: `10px solid ${fgColor}`,
-              borderRadius: '32px',
-              padding: '24px 16px 20px',
-              background: isTransparent ? 'transparent' : bgColor,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              boxShadow: 'var(--shadow-lg)',
-              position: 'relative',
-            }}>
-              <div style={{
-                width: '40px',
-                height: '4px',
-                background: 'rgba(0,0,0,0.15)',
-                borderRadius: '4px',
-                marginBottom: '14px',
-              }} />
-              
-              <div
-                className={`qr-preview-box ${isTransparent ? 'transparent-bg' : ''}`}
-                style={{ width: '240px', height: '240px', margin: 0, padding: 0, background: 'transparent' }}
-              >
-                {renderError ? (
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    padding: '16px',
-                    background: '#fef2f2',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1.5px dashed #f87171',
-                    color: '#991b1b',
-                    gap: '6px',
-                  }}>
-                    <AlertTriangle size={28} style={{ color: '#dc2626' }} />
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 700 }}>Data Melebihi Kapasitas</span>
-                    <span style={{ fontSize: '0.6875rem', color: '#b91c1c', lineHeight: 1.4 }}>
-                      Kapasitas maksimal QR Code adalah ~2 KB. Silakan kurangi teks atau gunakan file yang lebih kecil.
-                    </span>
-                  </div>
-                ) : (
-                  <div ref={containerRef} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
-                )}
-              </div>
+          <div
+            className={`qr-frame-wrapper ${ctaFrame === 'phone-mockup' ? 'phone-mockup-frame' : ''}`}
+            style={
+              ctaFrame === 'phone-mockup'
+                ? {
+                    borderColor: fgColor,
+                    background: isTransparent ? 'transparent' : bgColor,
+                  }
+                : undefined
+            }
+          >
+            {ctaFrame === 'phone-mockup' && (
+              <div className="phone-speaker-notch" />
+            )}
 
-              <div style={{
-                marginTop: '12px',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                color: fgColor,
-                letterSpacing: '0.04em',
-              }}>
-                {ctaText}
-              </div>
-            </div>
-          ) : (
             <div
-              className={`qr-preview-box ${isTransparent ? 'transparent-bg' : ''}`}
+              className={`qr-preview-box ${ctaFrame === 'phone-mockup' ? 'in-phone' : ''} ${isTransparent ? 'transparent-bg' : ''}`}
               style={{ background: isTransparent ? undefined : bgColor }}
             >
               {renderError ? (
@@ -206,23 +163,28 @@ export default function PreviewStage({ config }) {
                   </span>
                 </div>
               ) : (
-                <div ref={containerRef} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                <div
+                  ref={containerRef}
+                  style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                />
               )}
             </div>
-          )}
+
+            {ctaFrame === 'phone-mockup' && (
+              <div className="phone-cta-label" style={{ color: fgColor }}>
+                {ctaText}
+              </div>
+            )}
+          </div>
 
           {ctaFrame === 'bottom-ribbon' && (
-            <div style={{
-              background: fgColor,
-              color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
-              padding: '6px 24px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.8125rem',
-              fontWeight: 800,
-              letterSpacing: '0.08em',
-              marginTop: '10px',
-              boxShadow: 'var(--shadow-sm)',
-            }}>
+            <div
+              className="cta-bottom-badge"
+              style={{
+                background: fgColor,
+                color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
+              }}
+            >
               {ctaText}
             </div>
           )}
