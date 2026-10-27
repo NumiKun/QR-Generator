@@ -285,7 +285,7 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               borderRadius: 'var(--radius-md)',
               padding: '24px 16px',
               textAlign: 'center',
-              background: '#f8fafc',
+              background: 'var(--bg-surface-elevated)',
               cursor: isCompressing ? 'wait' : 'pointer',
               display: 'flex',
               flexDirection: 'column',
@@ -330,9 +330,9 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               gap: '8px',
               padding: '10px 14px',
               borderRadius: 'var(--radius-md)',
-              background: '#fef2f2',
-              border: '1px solid #fecaca',
-              color: '#b91c1c',
+              background: 'rgba(220, 38, 38, 0.1)',
+              border: '1px solid rgba(220, 38, 38, 0.25)',
+              color: 'var(--color-danger)',
               fontSize: '0.8125rem',
               marginTop: '6px',
             }}>
@@ -350,22 +350,22 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               marginTop: '8px',
               padding: '10px 14px',
               borderRadius: 'var(--radius-md)',
-              background: '#ecfdf5',
-              border: '1px solid #a7f3d0',
+              background: 'rgba(5, 150, 105, 0.12)',
+              border: '1px solid rgba(5, 150, 105, 0.25)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 {payload.startsWith('data:image/') && (
                   <img
                     src={payload}
                     alt="Thumbnail"
-                    style={{ width: '32px', height: '32px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #cbd5e1', background: '#ffffff' }}
+                    style={{ width: '32px', height: '32px', objectFit: 'contain', borderRadius: '4px', border: '1px solid var(--border-subtle)', background: 'var(--bg-surface)' }}
                   />
                 )}
                 <div>
-                  <span style={{ color: '#059669', fontWeight: 700, fontSize: '0.8125rem', display: 'block' }}>
+                  <span style={{ color: 'var(--color-success)', fontWeight: 700, fontSize: '0.8125rem', display: 'block' }}>
                     Gambar Siap Dibuat QR
                   </span>
-                  <span style={{ color: '#047857', fontSize: '0.71875rem' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: '0.71875rem' }}>
                     Ukuran data: {Math.round(payload.length / 1024 * 10) / 10} KB (Aman)
                   </span>
                 </div>
@@ -374,13 +374,13 @@ export default function InputStudio({ payload, setPayload, inputMode, setInputMo
               <button
                 onClick={() => setPayload('')}
                 style={{
-                  color: '#dc2626',
+                  color: 'var(--color-danger)',
                   fontSize: '0.75rem',
                   fontWeight: 600,
                   padding: '4px 10px',
                   borderRadius: 'var(--radius-sm)',
-                  background: '#ffffff',
-                  border: '1px solid #fecaca',
+                  background: 'var(--bg-surface)',
+                  border: '1px solid var(--border-subtle)',
                 }}
               >
                 Hapus

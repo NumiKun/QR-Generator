@@ -1,7 +1,9 @@
 import React from 'react';
-import { Heart, ExternalLink } from 'lucide-react';
+import { Heart, ExternalLink, Sun, Moon } from 'lucide-react';
 
-export default function Header() {
+export default function Header({ theme = 'light', toggleTheme }) {
+  const isDark = theme === 'dark';
+
   return (
     <header className="app-header">
       <div className="brand-wrapper">
@@ -11,7 +13,21 @@ export default function Header() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="theme-toggle-btn"
+          aria-label={isDark ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap'}
+          title={isDark ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap'}
+        >
+          {isDark ? (
+            <Sun size={18} className="theme-toggle-icon" />
+          ) : (
+            <Moon size={18} className="theme-toggle-icon" />
+          )}
+        </button>
+
         <a
           href="https://saweria.co/suree"
           target="_blank"

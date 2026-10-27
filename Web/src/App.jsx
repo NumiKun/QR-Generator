@@ -10,6 +10,7 @@ import ExportDeck from './components/ExportDeck';
 import PrintModal from './components/PrintModal';
 
 const STORAGE_KEY = 'anyqr_user_preferences_v1';
+const THEME_STORAGE_KEY = 'anyqr_theme_preference';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -41,28 +42,28 @@ class ErrorBoundary extends React.Component {
           justifyContent: 'center',
           padding: '24px',
           textAlign: 'center',
-          background: '#f8fafc',
-          color: '#0f172a',
+          background: 'var(--bg-app, #f8fafc)',
+          color: 'var(--text-primary, #0f172a)',
           fontFamily: 'system-ui, -apple-system, sans-serif',
         }}>
           <div style={{
             maxWidth: '460px',
-            background: '#ffffff',
+            background: 'var(--bg-surface, #ffffff)',
             padding: '36px 28px',
             borderRadius: '16px',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 10px 25px -5px rgba(15, 23, 42, 0.08)',
+            border: '1px solid var(--border-subtle, #e2e8f0)',
+            boxShadow: 'var(--shadow-md, 0 10px 25px -5px rgba(15, 23, 42, 0.08))',
           }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px', color: '#dc2626' }}>
               Terjadi Kesalahan Memuat Data
             </h2>
-            <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '24px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary, #64748b)', marginBottom: '24px', lineHeight: 1.5 }}>
               Data payload atau gambar yang dipilih melebihi batas kapasitas QR Code.
             </p>
             <button
               onClick={this.handleReset}
               style={{
-                background: '#4f46e5',
+                background: 'var(--color-primary, #4f46e5)',
                 color: '#ffffff',
                 border: 'none',
                 padding: '10px 20px',
@@ -100,6 +101,39 @@ export default function App() {
   const [ctaText, setCtaText] = useState('SCAN ME');
 
   const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
+
+  // Theme state with localStorage and prefers-color-scheme support
+  const [theme, setTheme] = useState(() => {
+    try {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === 'dark' || saved === 'light') return saved;
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark';
+      }
+    } catch {
+      // Ignore
+    }
+    return 'light';
+  });
+
+  // Sync theme with document attributes & localStorage
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-theme', theme);
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // Ignore
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   // Restore user preferences from LocalStorage on mount
   useEffect(() => {
@@ -159,7 +193,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="app-shell" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Header />
+        <Header theme={theme} toggleTheme={toggleTheme} />
 
         <main className="studio-layout">
           {/* Left Column: Customization Studio Workspace */}
