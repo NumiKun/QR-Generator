@@ -107,19 +107,22 @@ export default function PreviewStage({ config }) {
           <span>Pratinjau Langsung</span>
         </div>
 
-        {/* Kotak Pratinjau QR Code dengan Bingkai CTA */}
-        <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {ctaFrame === 'top-header' && (
-            <div
-              className="cta-top-badge"
-              style={{
-                background: fgColor,
-                color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
-              }}
-            >
-              {ctaText}
+        {/* Kotak Pratinjau QR Code dengan Bingkai CTA & Animasi Halus */}
+        <div className="preview-stage-viewport">
+          {/* Top Header Drawer */}
+          <div className={`cta-badge-drawer top-drawer ${ctaFrame === 'top-header' ? 'open' : ''}`}>
+            <div className="cta-badge-inner">
+              <div
+                className="cta-top-badge"
+                style={{
+                  background: fgColor,
+                  color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
+                }}
+              >
+                {ctaText}
+              </div>
             </div>
-          )}
+          </div>
 
           <div
             className={`qr-frame-wrapper ${ctaFrame === 'phone-mockup' ? 'phone-mockup-frame' : ''}`}
@@ -132,9 +135,7 @@ export default function PreviewStage({ config }) {
                 : undefined
             }
           >
-            {ctaFrame === 'phone-mockup' && (
-              <div className="phone-speaker-notch" />
-            )}
+            <div className="phone-speaker-notch" />
 
             <div
               className={`qr-preview-box ${ctaFrame === 'phone-mockup' ? 'in-phone' : ''} ${isTransparent ? 'transparent-bg' : ''}`}
@@ -170,24 +171,25 @@ export default function PreviewStage({ config }) {
               )}
             </div>
 
-            {ctaFrame === 'phone-mockup' && (
-              <div className="phone-cta-label" style={{ color: fgColor }}>
-                {ctaText}
-              </div>
-            )}
-          </div>
-
-          {ctaFrame === 'bottom-ribbon' && (
-            <div
-              className="cta-bottom-badge"
-              style={{
-                background: fgColor,
-                color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
-              }}
-            >
+            <div className="phone-cta-label" style={{ color: fgColor }}>
               {ctaText}
             </div>
-          )}
+          </div>
+
+          {/* Bottom Ribbon Drawer */}
+          <div className={`cta-badge-drawer bottom-drawer ${ctaFrame === 'bottom-ribbon' ? 'open' : ''}`}>
+            <div className="cta-badge-inner">
+              <div
+                className="cta-bottom-badge"
+                style={{
+                  background: fgColor,
+                  color: isTransparent || bgColor === '#FFFFFF' ? '#ffffff' : bgColor,
+                }}
+              >
+                {ctaText}
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Indikator Kemudahan Scan */}
