@@ -51,7 +51,7 @@ export default function ExportDeck({ config, onOpenPrint }) {
   };
 
   return (
-    <div style={{ width: '100%', marginTop: '20px' }}>
+    <div style={{ width: '100%' }}>
       {/* Tombol Aksi Ekspor */}
       <div className="action-grid">
         {/* Salin ke Clipboard */}

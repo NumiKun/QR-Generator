@@ -546,13 +546,38 @@ button {
   box-shadow: 0 0 8px var(--color-primary-glow);
 }
 
-/* Right Sticky Live Preview Stage */
-.preview-sticky-stage {
+/* Right Sticky Live Preview Stage & Action Sidebar */
+.preview-sidebar-sticky {
   position: sticky;
-  top: 96px;
+  top: 88px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  max-height: calc(100vh - 104px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+}
+
+.preview-sidebar-sticky::-webkit-scrollbar {
+  width: 5px;
+}
+
+.preview-sidebar-sticky::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.preview-sidebar-sticky::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+}
+
+.preview-sticky-stage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .stage-card {
@@ -1071,9 +1096,12 @@ button {
     padding: 20px;
   }
 
+  .preview-sidebar-sticky,
   .preview-sticky-stage {
     position: static;
     order: -1;
+    max-height: none;
+    overflow-y: visible;
   }
 
   .qr-preview-box {

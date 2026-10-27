@@ -209,13 +209,13 @@ export default function App() {
           </div>
 
           {/* Right Column: Sticky Live Vector Stage & Export Deck */}
-          <div>
+          <aside className="preview-sidebar-sticky">
             <PreviewStage config={currentConfig} />
             <ExportDeck
               config={currentConfig}
               onOpenPrint={() => setIsPrintModalOpen(true)}
             />
-          </div>
+          </aside>
         </main>
 
         {/* Printable Sheet Modal */}
